@@ -1,0 +1,192 @@
+{
+    "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "spacing": 5, // Gaps between modules (4px)
+    "margin-top": 10,
+    "margin-left": 10,
+    "margin-right": 10,
+    "margin-bottom": 0,
+
+    // Choose the order of the modules
+    "modules-left": [
+        "group/os-workspaces",
+        "custom/weather",
+        "tray"
+    ],
+    "modules-center": [
+        "clock#date"
+    ],
+    "modules-right": [
+        "group/sysmon",
+        "group/hardware"
+    ],
+
+    // Modules configuration
+    "hyprland/workspaces": {
+         "on-click": "activate",
+         "format": "{icon}",
+         "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+         },
+         "all-outputs": true
+    },
+
+    "hyprland/language": {
+	      "format": "{}",
+        "min-length": 3,
+        "max-length": 3,
+        "format-en": "EN",
+        "format-th": "TH"
+    },
+
+    "hyprland/window": {
+        "format": "  {title}",
+        //"max-length": 50
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 5
+    },
+
+    "clock": {
+        "format": "{:%d %B %R}"
+        //"format-alt": "{:%d %B %Y %R}"
+        //"tooltip-format": "{:%d %B %Y}"
+    },
+
+    "clock#date": {
+        "format": "{:%A, %e %B  %H:%M}", // Icon: calendar-alt
+        //"format": "{:%I:%M %p  %A %b %d}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "today-format": "<b>{}</b>"
+    },
+
+    "cpu": {
+        "interval": 1,
+        "format": "{usage}%  ", // Icon: microchip
+        "max-length": 7,
+        "min-length": 7
+    },
+
+    "memory": {
+        "interval": 1,
+        "format": "{used:0.2f}GiB", // 
+        "max-length": 8,
+        "min-length": 8
+    },
+    
+    "disk": {
+        "format": "{free}   ",
+        "path": "/",
+        "interval": 30
+    },
+
+    "network": {
+        "format-wifi": "   ({signalStrength}%)",
+        "format-ethernet": " ",
+        "format-linked": "{ifname} (No IP) ",
+        "format": "",
+        "format-disconnected": "",
+        "format-alt": "{ipaddr}/{cidr}",
+        "on-click": "wl-copy $(ip address show up scope global | grep inet | head -n1 | cut -d/ -f 1 | tr -d [:space:] | cut -c5-)",
+        "on-click-right": "wl-copy $(ip address show up scope global | grep inet6 | head -n1 | cut -d/ -f 1 | tr -d [:space:] | cut -c6-)",
+        "tooltip-format": " {bandwidthUpBits}\n {bandwidthDownBits}\n{ifname}\n{ipaddr}/{cidr}\n",
+        "tooltip-format-wifi": " {essid} {frequency}MHz\nStrength: {signaldBm}dBm ({signalStrength}%)\nIP: {ipaddr}/{cidr}\n {bandwidthUpBits}  {bandwidthDownBits}",
+        "interval": 1
+    },
+
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{icon}",
+        "tooltip": true,
+        "tooltip-format": "{volume}%",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": " {volume}%",
+        "format-source-muted": " ",
+        "format-icons": {
+            "headphone": " ",
+            "hands-free": " ",
+            "headset": " ",
+            "phone": " ",
+            "portable": " ",
+            "car": " ",
+            "default": [" ", " ", " "]
+        },
+        "on-click": "pavucontrol"
+    },
+
+    "wireplumber": {
+        "on-click": "pavucontrol",
+        "on-click-right": "amixer sset Master toggle 1>/dev/null",
+        //on-click: "${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle";
+        //on-scroll-down: "${wpctl} set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 0.04+";
+        //on-scroll-up: "${wpctl} set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 0.04-";
+        "format": "<span foreground='#fab387'>{icon}</span> {volume}%",
+        "format-muted": " ",
+        "format-source": "",
+        "format-source-muted": "",
+        //"format-muted": "<span foreground='#fab387'> </span>",
+        //"format-icons": [ "<span foreground='#fab387'></span>" ]
+        "format-icons": {
+            "headphone": " ",
+            "hands-free": " ",
+            "headset": " ",
+            "phone": " ",
+            "portable": " ",
+            "car": " ",
+            "default": [" ", " ", " "]
+        },
+    },
+
+    "custom/os": {
+        "format": " ",
+        "icon": true,
+    },
+
+    "custom/weather": {
+        "format": "{}",
+        "interval": 600,
+        "exec": "curl -s 'https://wttr.in/?format=1'",
+        "exec-if": "ping wttr.in -c1"
+    },
+
+    "custom/power": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "wlogout"
+    },
+
+    // Group Hardware
+    "group/hardware": {
+        "orientation": "horizontal",
+        "modules": [
+            "wireplumber",
+            "hyprland/language",
+            "network"
+        ]
+    },
+    
+    "group/os-workspaces": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/os",
+            "hyprland/workspaces"
+        ]
+    },
+
+    "group/sysmon": {
+        "orientation": "horizontal",
+        "modules": [
+            "disk",
+            "cpu",
+            "memory"
+        ]
+    }
+    
+}
+
